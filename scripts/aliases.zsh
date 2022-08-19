@@ -11,7 +11,7 @@ __kube-helper-load-record() {
 }
 
 __kube-helper-clear-records() {
-    rm -rf ~/.kube-helper/records/$$-* 2> /dev/null
+    rm -rf `find ~/.kube-helper/records | grep $$-`
 }
 
 trap __kube-helper-clear-records EXIT
