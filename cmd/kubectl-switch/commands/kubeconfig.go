@@ -27,20 +27,17 @@ func listKubeConfigCommand() *cobra.Command {
 }
 
 func currentKubeConfigCommand() *cobra.Command {
-	format := false
-
 	cmd := &cobra.Command{
 		Use: "current",
 		Run: func(cmd *cobra.Command, args []string) {
 			context := core.NewDefault()
 
-			kubeconfig.PrintCurrent(context, format)
+			kubeconfig.PrintCurrent(context)
 		},
 	}
 	cmd.InitDefaultHelpFlag()
 	_ = cmd.Flags().MarkHidden("help")
 
-	cmd.Flags().BoolVar(&format, "format", format, "used in zsh title")
 	return cmd
 }
 
