@@ -28,7 +28,19 @@ kube-helper-analyse-get-result() {
   return $ret
 }
 
+kube-helper-add-recorder() {
+  [[ "$BUFFER" = *"kube-record" ]] || BUFFER="$BUFFER | kube-record"
+  local ret=$?
+  zle reset-prompt
+  return $ret
+}
+
 zle     -N             kube-helper-analyse-get-result
 bindkey -M emacs '\ek' kube-helper-analyse-get-result
 bindkey -M vicmd '\ek' kube-helper-analyse-get-result
 bindkey -M viins '\ek' kube-helper-analyse-get-result
+
+zle     -N             kube-helper-add-recorder
+bindkey -M emacs '\er' kube-helper-add-recorder
+bindkey -M vicmd '\er' kube-helper-add-recorder
+bindkey -M viins '\er' kube-helper-add-recorder

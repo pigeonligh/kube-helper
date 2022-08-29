@@ -22,7 +22,7 @@ trap __kube-helper-clear-records EXIT
 
 alias -g kube-record="__kube-helper-record"
 
-__kube-helper-add-recorder() {
+__kube-helper-add-recorder_for_get() {
     NEW="$BUFFER"
     if [[ "$NEW" = "kubectl "*"get "* ]] || [[ "$NEW" = "k "*"get "* ]]; then
         [[ "$NEW" = *"kube-record" ]] || NEW="$NEW | kube-record"
@@ -31,4 +31,4 @@ __kube-helper-add-recorder() {
     zle .$WIDGET "$@"
 }
 
-zle -N accept-line __kube-helper-add-recorder
+zle -N accept-line __kube-helper-add-recorder_for_get
