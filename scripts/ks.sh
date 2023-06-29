@@ -19,7 +19,7 @@ complete -o default -F __ks ks
 ### ksns
 
 function __ksns {
-    kubectl get namespace --no-headers -o custom-columns=:.metadata.name
+    kubectl get namespace --no-headers -o custom-columns=:.metadata.name 2> /dev/null
 }
 
 function ksns {

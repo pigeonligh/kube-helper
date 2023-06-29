@@ -3,25 +3,33 @@ package kubeconfig
 import (
 	"fmt"
 
+	"k8s.io/client-go/tools/clientcmd"
+
 	"gopkg.pigeonligh.com/kube-helper/pkg/core"
 	"gopkg.pigeonligh.com/kube-helper/pkg/utils"
 )
 
-func wrapKubeconfig(s string) string {
-	return ` | %{[32m%}kube:%{[32m%}` + s + `%{[32m%}%{[00m%}`
+func parseNamespace(path string) string {
+	ns, _, _ := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
+		&clientcmd.ClientConfigLoadingRules{ExplicitPath: path},
+		&clientcmd.ConfigOverrides{}).Namespace()
+	return ns
 }
 
-func PrintCurrent(c *core.Context, format bool) {
+func joinNameAndNs(name, ns string) string {
+	if ns == "" {
+		return name
+	}
+	return name + "/" + ns
+}
+
+func PrintCurrent(c *core.Context) {
 	config := c.ReadConfig()
 	if len(config.SwitchConfig.Kubeconfigs) > 0 {
 		nowKubeconfigPath := utils.KubeConfig()
 		for _, conf := range config.SwitchConfig.Kubeconfigs {
 			if conf.Path == nowKubeconfigPath {
-				if format {
-					fmt.Fprintln(c.Writer(), wrapKubeconfig(conf.Name))
-				} else {
-					fmt.Fprintln(c.Writer(), conf.Name)
-				}
+				fmt.Fprintln(c.Writer(), joinNameAndNs(conf.Name, parseNamespace(nowKubeconfigPath)))
 				return
 			}
 		}
